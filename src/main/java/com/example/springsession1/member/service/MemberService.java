@@ -33,4 +33,11 @@ public class MemberService {
         );
         member.update(dto.getEmail());
     }
+
+    public void deleteById(Long memberId) {
+        memberRepository.findById(memberId).orElseThrow(
+                () -> new IllegalStateException("not found member with id: " + memberId)
+        );
+        memberRepository.deleteById(memberId);
+    }
 }

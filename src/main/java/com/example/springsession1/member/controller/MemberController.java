@@ -26,11 +26,18 @@ public class MemberController {
         return ResponseEntity.ok(memberService.findMemberById(memberId));
     }
 
-    @PutMapping("members")
+    @PutMapping("/members")
     public void updateMember(
             @SessionAttribute(name = Const.LOGIN_MEMBER) Long memberId,
             @RequestBody MemberUpdateRequestDto dto
     ) {
         memberService.update(memberId,dto);
+    }
+
+    @DeleteMapping("/members")
+    public void deleteMember(
+            @SessionAttribute(name = Const.LOGIN_MEMBER) Long memberId
+    ){
+        memberService.deleteById(memberId);
     }
 }
