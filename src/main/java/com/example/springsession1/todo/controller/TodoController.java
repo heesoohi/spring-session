@@ -42,7 +42,7 @@ public class TodoController {
         return ResponseEntity.ok(todoService.updateTodo(memberId, todoId, dto));
     }
 
-    @DeleteMapping("/todos/{todoId} ")
+    @DeleteMapping("/todos/{todoId}")
     public void deleteById(
             @SessionAttribute(name = Const.LOGIN_MEMBER) Long memberId,
             @PathVariable Long todoId

@@ -55,7 +55,7 @@ public class TodoService {
 
         Todo todo = getValidatedMemberTodo(memberId, todoId);
 
-        todoRepository.deleteById(todo.getId());
+        todoRepository.deleteById(todoId);
     }
 
     public Todo getValidatedMemberTodo(Long memberId, Long todoId){
