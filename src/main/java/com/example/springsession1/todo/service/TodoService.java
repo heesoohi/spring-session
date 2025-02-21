@@ -7,6 +7,7 @@ import com.example.springsession1.todo.entity.Todo;
 import com.example.springsession1.todo.repository.TodoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ public class TodoService {
     private final TodoRepository todoRepository;
     private final MemberRepository memberRepository;
 
+    @Transactional
     public TodoSaveResponseDto saveTodo(Long memberId, TodoSaveRequestDto dto) {
         Member member = memberRepository.findById(memberId).orElseThrow(
                 () -> new IllegalStateException("Member not found with id " + memberId)
@@ -28,12 +30,14 @@ public class TodoService {
         return new TodoSaveResponseDto(savedTodo.getId(), member.getId(), savedTodo.getContent());
     }
 
+    @Transactional(readOnly = true)
     public List<TodoResponseDto> findAll() {
         return todoRepository.findAll().stream()
                 .map( todo -> new TodoResponseDto(todo.getId(), todo.getContent()))
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public TodoResponseDto findById(Long todoId) {
         Todo todo = todoRepository.findById(todoId).orElseThrow(
                 () -> new IllegalStateException("Todo not found")
@@ -42,6 +46,7 @@ public class TodoService {
         return new TodoResponseDto(todo.getId(), todo.getContent());
     }
 
+    @Transactional
     public TodoUpdateResponseDto updateTodo(Long memberId, Long todoId, TodoUpdateRequestDto dto) {
 
         Todo todo = getValidatedMemberTodo(memberId, todoId);
@@ -51,6 +56,7 @@ public class TodoService {
         return new TodoUpdateResponseDto(todo.getId(), todo.getContent());
     }
 
+    @Transactional
     public void deleteById(Long memberId, Long todoId) {
 
         Todo todo = getValidatedMemberTodo(memberId, todoId);
@@ -58,7 +64,7 @@ public class TodoService {
         todoRepository.deleteById(todoId);
     }
 
-    public Todo getValidatedMemberTodo(Long memberId, Long todoId){
+    private Todo getValidatedMemberTodo(Long memberId, Long todoId){
         Member member = memberRepository.findById(memberId).orElseThrow(
                 () -> new IllegalStateException("Member not found")
         );
