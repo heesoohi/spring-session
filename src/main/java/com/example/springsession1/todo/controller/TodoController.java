@@ -1,9 +1,7 @@
 package com.example.springsession1.todo.controller;
 
 import com.example.springsession1.common.consts.Const;
-import com.example.springsession1.todo.dto.TodoResponseDto;
-import com.example.springsession1.todo.dto.TodoSaveRequestDto;
-import com.example.springsession1.todo.dto.TodoSaveResponseDto;
+import com.example.springsession1.todo.dto.*;
 import com.example.springsession1.todo.service.TodoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -34,5 +32,16 @@ public class TodoController {
     public ResponseEntity<TodoResponseDto> getOne(@PathVariable Long todoId){
         return ResponseEntity.ok(todoService.findById(todoId));
     }
+
+    @PutMapping("/todos/{todoId}")
+    public ResponseEntity<TodoUpdateResponseDto> updateTodo(
+            @SessionAttribute(name = Const.LOGIN_MEMBER) Long memberId,
+            @PathVariable Long todoId,
+            @RequestBody TodoUpdateRequestDto dto
+            ){
+        return ResponseEntity.ok(todoService.updateTodo(memberId, todoId, dto));
+    }
+
+
 }
 

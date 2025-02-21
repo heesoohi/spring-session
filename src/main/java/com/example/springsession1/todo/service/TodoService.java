@@ -2,9 +2,7 @@ package com.example.springsession1.todo.service;
 
 import com.example.springsession1.member.entity.Member;
 import com.example.springsession1.member.repository.MemberRepository;
-import com.example.springsession1.todo.dto.TodoResponseDto;
-import com.example.springsession1.todo.dto.TodoSaveRequestDto;
-import com.example.springsession1.todo.dto.TodoSaveResponseDto;
+import com.example.springsession1.todo.dto.*;
 import com.example.springsession1.todo.entity.Todo;
 import com.example.springsession1.todo.repository.TodoRepository;
 import lombok.RequiredArgsConstructor;
@@ -42,5 +40,23 @@ public class TodoService {
         );
 
         return new TodoResponseDto(todo.getId(), todo.getContent());
+    }
+
+    public TodoUpdateResponseDto updateTodo(Long memberId, Long todoId, TodoUpdateRequestDto dto) {
+        Member member = memberRepository.findById(memberId).orElseThrow(
+                () -> new IllegalStateException("Member not found")
+        );
+
+        Todo todo = todoRepository.findById(todoId).orElseThrow(
+                () -> new IllegalStateException("Todo not found")
+        );
+
+        if(!todo.getMember().getId().equals(member.getId())){
+            throw new IllegalStateException("Invalid member id");
+        }
+
+        todo.update(dto.getContent());
+
+        return new TodoUpdateResponseDto(todo.getId(), todo.getContent());
     }
 }

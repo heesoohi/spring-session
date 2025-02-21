@@ -22,4 +22,8 @@ public class Todo {
         this.content = content;
         this.member = member;
     }
+
+    public void update(String content) {
+        this.content = content;
+    }
 }
