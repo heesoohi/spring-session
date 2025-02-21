@@ -43,6 +43,22 @@ public class TodoService {
     }
 
     public TodoUpdateResponseDto updateTodo(Long memberId, Long todoId, TodoUpdateRequestDto dto) {
+
+        Todo todo = getValidatedMemberTodo(memberId, todoId);
+
+        todo.update(dto.getContent());
+
+        return new TodoUpdateResponseDto(todo.getId(), todo.getContent());
+    }
+
+    public void deleteById(Long memberId, Long todoId) {
+
+        Todo todo = getValidatedMemberTodo(memberId, todoId);
+
+        todoRepository.deleteById(todo.getId());
+    }
+
+    public Todo getValidatedMemberTodo(Long memberId, Long todoId){
         Member member = memberRepository.findById(memberId).orElseThrow(
                 () -> new IllegalStateException("Member not found")
         );
@@ -55,8 +71,6 @@ public class TodoService {
             throw new IllegalStateException("Invalid member id");
         }
 
-        todo.update(dto.getContent());
-
-        return new TodoUpdateResponseDto(todo.getId(), todo.getContent());
+        return todo;
     }
 }
