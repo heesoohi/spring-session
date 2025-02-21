@@ -1,6 +1,7 @@
 package com.example.springsession1.member.service;
 
 import com.example.springsession1.member.dto.MemberResponseDto;
+import com.example.springsession1.member.dto.MemberUpdateRequestDto;
 import com.example.springsession1.member.entity.Member;
 import com.example.springsession1.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,5 +25,12 @@ public class MemberService {
                 () -> new IllegalStateException("not found member with id: " + memberId)
         );
         return new MemberResponseDto(member.getId(), member.getEmail());
+    }
+
+    public void update(Long memberId, MemberUpdateRequestDto dto) {
+        Member member = memberRepository.findById(memberId).orElseThrow(
+                () -> new IllegalStateException("not found member with id: " + memberId)
+        );
+        member.update(dto.getEmail());
     }
 }

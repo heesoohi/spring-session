@@ -1,12 +1,12 @@
 package com.example.springsession1.member.controller;
 
+import com.example.springsession1.common.consts.Const;
 import com.example.springsession1.member.dto.MemberResponseDto;
+import com.example.springsession1.member.dto.MemberUpdateRequestDto;
 import com.example.springsession1.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,5 +24,13 @@ public class MemberController {
     @GetMapping("/members/{memberId}")
     public ResponseEntity<MemberResponseDto> getMember(@PathVariable Long memberId) {
         return ResponseEntity.ok(memberService.findMemberById(memberId));
+    }
+
+    @PutMapping("members")
+    public void updateMember(
+            @SessionAttribute(name = Const.LOGIN_MEMBER) Long memberId,
+            @RequestBody MemberUpdateRequestDto dto
+    ) {
+        memberService.update(memberId,dto);
     }
 }
